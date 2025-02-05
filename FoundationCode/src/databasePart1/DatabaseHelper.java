@@ -259,6 +259,64 @@ public class DatabaseHelper {
 	    }
 	}
 
+
+	/////////////deleteUser() added by jace if any issues let me know////////////
+	public String deleteUser(String username)
+	{
+		String errorMessage = "";
+        
+		if(!doesUserExist(username))
+		{
+			return "Username not associated with any known account.";
+		}
+		
+		if(getUserRole(username).equals("admin"))
+		{
+			return "Admins cannot delete their own account.";
+		}
+		
+		
+		int userID = -1;
+		
+		String query = "SELECT id FROM cse360users WHERE userName = ?";
+		
+		try (PreparedStatement pstmt = connection.prepareStatement(query))
+		{
+			pstmt.setString(1, username);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if(rs.next())
+			{
+				userID = rs.getInt("id");
+			} else {
+				throw new SQLException("User not found");
+			}
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return "ERROR";
+		}
+	
+		String deleteQuery = "DELETE FROM cse360users WHERE id = ?";
+		try(PreparedStatement pstmt = connection.prepareStatement(deleteQuery))
+		{
+			pstmt.setInt(1, userID);
+			int changed = pstmt.executeUpdate();
+			
+			if(changed > 0)
+			{
+				return "";
+			}else {
+				return "Failed to delete user.";
+			}
+		}catch (SQLException e )
+		{
+			e.printStackTrace();
+			return "ERROR";
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////////
+	
+	
 	// Closes the database connection and statement.
 	public void closeConnection() {
 		try{ 
