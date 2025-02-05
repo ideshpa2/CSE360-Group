@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * InvitePage class represents the page where an admin can generate an invitation code.
@@ -33,17 +35,25 @@ public class InvitationPage {
 	    Button showCodeButton = new Button("Generate Invitation Code");
 	    
 	    // Label to display the generated invitation code
-	    Label inviteCodeLabel = new Label(""); ;
+	    Label inviteCodeLabel = new Label("");
         inviteCodeLabel.setStyle("-fx-font-size: 14px; -fx-font-style: italic;");
-        
+
+	    // Label to display the deadline
+            Label deadlineLabel = new Label("");
+            deadlineLabel.setStyle("-fx-font-size: 14px; -fx-font-style: italic;");
+	    
         showCodeButton.setOnAction(a -> {
         	// Generate the invitation code using the databaseHelper and set it to the label
             String invitationCode = databaseHelper.generateInvitationCode();
-            inviteCodeLabel.setText(invitationCode);
+            LocalDateTime deadline = LocalDateTime.now().plusDays(7);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            String formattedDeadline = deadline.format(formatter);
+            inviteCodeLabel.setText("Invite Code: "+invitationCode);
+            deadlineLabel.setText("Valid Until: " + formattedDeadline);
         });
 	    
 
-        layout.getChildren().addAll(userLabel, showCodeButton, inviteCodeLabel);
+        layout.getChildren().addAll(userLabel, showCodeButton, inviteCodeLabel, deadlineLabel);
 	    Scene inviteScene = new Scene(layout, 800, 400);
 
 	    // Set the scene to primary stage
