@@ -28,7 +28,14 @@ public class AdminHomePage {
         Button assignRoleButton = new Button("Assign User Role");
         assignRoleButton.setOnAction(e -> new AssignRolesPage(databaseHelper).show(primaryStage));
 
-        layout.getChildren().addAll(adminLabel, listUsersButton, assignRoleButton);
+        //////////////delete Button and action added by jace let me know if issues arise////
+        Button deleteButton = new Button("Delete Users");
+        deleteButton.setOnAction(a -> {
+            new adminDeletePage(databaseHelper).show(primaryStage);
+        });
+        //////////////////////////////
+        
+        layout.getChildren().addAll(adminLabel, listUsersButton, assignRoleButton, deleteButton);
         Scene adminScene = new Scene(layout, 800, 400);
 
         primaryStage.setScene(adminScene);
