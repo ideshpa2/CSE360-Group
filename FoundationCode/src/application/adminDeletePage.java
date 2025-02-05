@@ -15,8 +15,7 @@ import javafx.stage.Stage;
 
 public class adminDeletePage 
 {
-
-	private final DatabaseHelper databaseHelper;
+    private final DatabaseHelper databaseHelper;
 	
    
     public adminDeletePage(DatabaseHelper databaseHelper) {
@@ -27,36 +26,43 @@ public class adminDeletePage
     public void show(Stage primaryStage) 
     {
     	Label errorLabel = new Label();
-		  errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+	errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
 		
-  		Label userDeleted = new Label();
-  		userDeleted.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
+  	Label userDeleted = new Label();
+  	userDeleted.setStyle("-fx-text-fill: red; -fx-font-size: 12px;");
 		
     	VBox layout = new VBox();
-	    layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
+	layout.setStyle("-fx-alignment: center; -fx-padding: 20;");
 	    
 	    // label to display the admin delete page
-	    Label adminLabel = new Label("Admin delete page");
-	    adminLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+	Label adminLabel = new Label("Admin delete page");
+	adminLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
-	    layout.getChildren().add(adminLabel);
+	layout.getChildren().add(adminLabel);
 
-	    TextField userNameToDelete = new TextField();
-      userNameToDelete.setPromptText("Enter username of user to delete");
-      userNameToDelete.setMaxWidth(250);
+	TextField userNameToDelete = new TextField();
+        userNameToDelete.setPromptText("Enter username of user to delete");
+        userNameToDelete.setMaxWidth(250);
         
-      Button deleteButton = new Button("Delete");
-      deleteButton.setOnAction(a -> {
-            String userName = userNameToDelete.getText();
-            String error = databaseHelper.deleteUser(userName);
-      			if(!error.equals(""))
-      			{
-      				errorLabel.setText(error);
-      			}else {
-      				System.out.println("User " + userName + " deleted successfully.");
-      				userDeleted.setText("User " + userName + " deleted successfully.");
-      				new AdminHomePage(databaseHelper).show(primaryStage);
-      			}
+        Button deleteButton = new Button("Delete");
+	Button confirmDelete = new Alert(AlertType.CONFIRMATION);
+	    
+        deleteButton.setOnAction(a -> {
+		//resource I used to learn this https://stackoverflow.com/questions/44101426/javafx-alert-box-on-button-click
+		Optional<ButtonType> result = confirmDelete.showAndWait();
+		if(result.get() == ButtonType.OK)
+		{
+	        	String userName = userNameToDelete.getText();
+	        	String error = databaseHelper.deleteUser(userName);
+	      	    	if(!error.equals(""))
+	      	    	{
+	      			errorLabel.setText(error);
+	      		}else {
+	      			System.out.println("User " + userName + " deleted successfully.");
+	      			userDeleted.setText("User " + userName + " deleted successfully.");
+	      			new AdminHomePage(databaseHelper).show(primaryStage);
+	      		}
+		}
         
         });
         
