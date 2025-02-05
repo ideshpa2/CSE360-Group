@@ -45,7 +45,7 @@ public class adminDeletePage
         userNameToDelete.setMaxWidth(250);
         
         Button deleteButton = new Button("Delete");
-	Button confirmDelete = new Alert(AlertType.CONFIRMATION);
+	Button confirmDelete = new Alert(AlertType.CONFIRMATION, "Are you sure you want to delete this user?");
 	    
         deleteButton.setOnAction(a -> {
 		//resource I used to learn this https://stackoverflow.com/questions/44101426/javafx-alert-box-on-button-click
